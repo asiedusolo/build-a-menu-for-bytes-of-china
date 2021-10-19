@@ -269,3 +269,48 @@ INSERT INTO categories_dishes VALUES (
   8,
   17.95
 );
+
+SELECT restaurant.name, address.street_number, address.street_name, restaurant.telephone
+FROM restaurant, address
+WHERE restaurant.id = address.restaurant_id;
+
+SELECT MAX(rating) AS best_rating
+FROM review;
+
+SELECT dish.name AS dish_name, categories_dishes.price AS price, category.name AS category
+FROM dish, categories_dishes, category
+WHERE dish.id = categories_dishes.dish_id 
+  AND category.id = categories_dishes.category_id
+ORDER BY dish.name;
+
+SELECT category.name AS category, dish.name AS dish_name, categories_dishes.price AS price
+FROM dish, categories_dishes, category
+WHERE dish.id = categories_dishes.dish_id 
+  AND category.id = categories_dishes.category_id
+ORDER BY category.name;
+
+SELECT dish.name AS spicy_dish_name, category.name AS category, categories_dishes.price AS price
+FROM dish, categories_dishes, category
+WHERE dish.id = categories_dishes.dish_id 
+  AND category.id = categories_dishes.category_id
+  AND dish.hot_and_spicy = true;
+
+SELECT dish_id, COUNT(dish_id) AS dish_count
+FROM categories_dishes
+GROUP BY dish_id;
+
+SELECT dish_id, COUNT(dish_id) AS dish_count
+FROM categories_dishes
+GROUP BY dish_id
+HAVING COUNT(dish_id) > 1;
+
+SELECT dish.name AS dish_name, COUNT(categories_dishes.dish_id) AS dish_count
+FROM dish, categories_dishes
+GROUP BY dish.name, dish.id, categories_dishes.dish_id
+HAVING 
+  COUNT(categories_dishes.dish_id) > 1 AND 
+  categories_dishes.dish_id = dish.id;
+
+SELECT rating AS best_rating, description
+FROM review
+WHERE  rating = ( SELECT MAX(rating) from review );
